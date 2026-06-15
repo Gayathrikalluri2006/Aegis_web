@@ -1,6 +1,7 @@
 {
   "name": "tanstack_start_ts",
   "private": true,
+  "homepage": "https://Gayathrikalluri2006.github.io/Aegis_web",
   "sideEffects": false,
   "type": "module",
   "scripts": {
@@ -9,7 +10,10 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "test:e2e": "mocha \"selenium-tests/tests/**/*.test.js\" --timeout 120000"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -76,6 +80,11 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "chromedriver": "^115.0.0",
+    "gh-pages": "^5.0.0",
+    "mocha": "^10.2.0",
+    "selenium-webdriver": "^4.15.0",
+    "wait-on": "^8.0.0",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.6",

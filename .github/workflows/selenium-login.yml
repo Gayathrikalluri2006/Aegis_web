@@ -1,0 +1,38 @@
+name: Selenium Login E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      chrome:
+        image: selenium/standalone-chrome:latest
+        ports:
+          - 4444:4444
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Start Vite server
+        run: |
+          npx vite build
+          npx vite preview --port 4173 &
+          sleep 5
+      - name: Run Selenium tests
+        env:
+          TEST_URL: 'http://127.0.0.1:4173'
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          CI: 'true'
+        run: npx mocha "selenium-tests/tests/**/*.test.js" --timeout 120000

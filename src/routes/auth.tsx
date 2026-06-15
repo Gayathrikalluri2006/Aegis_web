@@ -97,16 +97,19 @@ function AuthPage() {
             <>
               <form onSubmit={submit} className="space-y-3">
                 <input
+                  id="auth-email"
                   type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email"
                   className="w-full rounded-xl border border-border bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary"
                 />
                 <input
+                  id="auth-password"
                   type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password (min 6 characters)"
                   className="w-full rounded-xl border border-border bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary"
                 />
                 <button
+                  id="auth-submit"
                   disabled={loading}
                   className="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] disabled:opacity-60"
                 >
