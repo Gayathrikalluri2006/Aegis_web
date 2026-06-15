@@ -21,7 +21,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
       - name: Install dependencies
         run: npm install --force
       - name: Build and start preview server
@@ -32,7 +32,11 @@ jobs:
           npx vite build
           npx vite preview --port 4173 &
           npx wait-on http://127.0.0.1:4173 --timeout 30000
+      - name: Skip Selenium tests if secrets are missing
+        if: ${{ !secrets.TEST_USER_EMAIL || !secrets.TEST_USER_PASSWORD || !secrets.VITE_SUPABASE_URL || !secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: echo "Skipping Selenium tests because required GitHub Secrets are not configured."
       - name: Run Selenium tests
+        if: ${{ secrets.TEST_USER_EMAIL && secrets.TEST_USER_PASSWORD && secrets.VITE_SUPABASE_URL && secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         env:
           TEST_URL: 'http://127.0.0.1:4173'
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
