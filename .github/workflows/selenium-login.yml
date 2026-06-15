@@ -16,6 +16,13 @@ jobs:
         ports:
           - 4444:4444
 
+    env:
+      VITE_SUPABASE_URL: 'https://rwvshowhpvcfxdbsapmi.supabase.co'
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3dnNob3docHZjZnhkYnNhcG1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzc3MTQsImV4cCI6MjA5NTgxMzcxNH0.KnQVTGMVoQFuqpReGhMBCTr07iF-1hHwYlkJq-rXeMQ'
+      TEST_USER_EMAIL: 'gayathrikalluri17@gmail.com'
+      TEST_USER_PASSWORD: 'daa@2004'
+      SELENIUM_SERVER_URL: 'http://localhost:4444'
+      CI: 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
@@ -25,22 +32,11 @@ jobs:
       - name: Install dependencies
         run: npm install --force
       - name: Build and start preview server
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         run: |
           npx vite build
           npx vite preview --port 4173 &
           npx wait-on http://127.0.0.1:4173 --timeout 30000
-      - name: Skip Selenium tests if secrets are missing
-        if: ${{ !secrets.TEST_USER_EMAIL || !secrets.TEST_USER_PASSWORD || !secrets.VITE_SUPABASE_URL || !secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-        run: echo "Skipping Selenium tests because required GitHub Secrets are not configured."
       - name: Run Selenium tests
-        if: ${{ secrets.TEST_USER_EMAIL && secrets.TEST_USER_PASSWORD && secrets.VITE_SUPABASE_URL && secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         env:
           TEST_URL: 'http://127.0.0.1:4173'
-          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
-          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
-          SELENIUM_SERVER_URL: 'http://localhost:4444'
-          CI: 'true'
         run: npx mocha "selenium-tests/tests/**/*.test.js" --timeout 120000
