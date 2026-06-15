@@ -1,7 +1,10 @@
 import { lazy, Suspense, useEffect, useState } from "react";
+import { createClientOnlyFn } from "@tanstack/react-start";
 import type { MapRoute, MapIncident } from "./SafetyMap.client";
 
-const SafetyMap = lazy(() => import("./SafetyMap.client").then((m) => ({ default: m.SafetyMap })));
+const SafetyMap = lazy(
+  createClientOnlyFn(() => import("./SafetyMap.client").then((m) => ({ default: m.SafetyMap })))
+);
 
 export function MapWrapper(props: {
   routes?: MapRoute[];
