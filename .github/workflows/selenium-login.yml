@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm install --force
       - name: Build and start preview server
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         run: |
           npx vite build
           npx vite preview --port 4173 &
