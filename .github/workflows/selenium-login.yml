@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: '20'
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install --force
       - name: Start Vite server
         run: |
           npx vite build
