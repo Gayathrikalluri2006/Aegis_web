@@ -24,15 +24,16 @@ jobs:
           node-version: '20'
       - name: Install dependencies
         run: npm install --force
-      - name: Start Vite server
+      - name: Build and start preview server
         run: |
           npx vite build
           npx vite preview --port 4173 &
-          sleep 5
+          npx wait-on http://127.0.0.1:4173 --timeout 30000
       - name: Run Selenium tests
         env:
           TEST_URL: 'http://127.0.0.1:4173'
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          SELENIUM_SERVER_URL: 'http://localhost:4444'
           CI: 'true'
         run: npx mocha "selenium-tests/tests/**/*.test.js" --timeout 120000
