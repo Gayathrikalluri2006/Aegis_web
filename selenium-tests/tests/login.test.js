@@ -2,7 +2,7 @@ const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const assert = require('assert');
 
-const TEST_URL = process.env.TEST_URL || 'http://127.0.0.1:4173';
+const BASE_URL = process.env.TEST_URL || 'http://127.0.0.1:4173/Aegis_web';
 const EMAIL = process.env.TEST_USER_EMAIL || 'test@example.com';
 const PASSWORD = process.env.TEST_USER_PASSWORD || 'password123';
 const SELENIUM_SERVER_URL = process.env.SELENIUM_SERVER_URL;
@@ -30,8 +30,7 @@ describe('Aegis Web login flow', function () {
   });
 
   it('should visit auth page and login successfully', async function () {
-    await driver.get(`${TEST_URL}/auth`);
-    await driver.wait(until.elementLocated(By.id('auth-email')), 10000);
+    await driver.get(`${BASE_URL}/auth`);
     await driver.findElement(By.id('auth-email')).sendKeys(EMAIL);
     await driver.findElement(By.id('auth-password')).sendKeys(PASSWORD);
     await driver.findElement(By.id('auth-submit')).click();
